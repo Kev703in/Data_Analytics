@@ -1,0 +1,16 @@
+#### clr console
+cat("\014")
+
+#### clear all loaded objects
+rm(list = ls())
+
+#### pipe multiple cmds 
+## basically does not need first argument
+ctrl+ shift + m
+
+
+
+penguins
+msleep
+carseats
+nurses <- tuesday

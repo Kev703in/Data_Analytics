@@ -1,0 +1,64 @@
+---
+title: "mpg_analysis"
+author: "Kevin Richard"
+date: "2024-08-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## MPG Analysis Report
+
+### MPG dataset
+```{r mpg, echo=FALSE, warning=FALSE}
+glimpse(mpg)
+```
+
+## Including Plots
+
+### City and Highway Mileage
+```{r City mileage to Highway, echo=FALSE}
+ggplot(mpg, aes(x=cty, y=hwy, colour = class)) +
+  geom_point() +
+  labs(x = "City Mileage", y = "Highway Mileage")
+```
+
+### Mean City and Highway Mileage by Transmission Type
+```{r mileage to transmission, echo=FALSE}
+mpg_trans <- mpg %>%
+  select(trans, cty, hwy) %>% 
+  group_by(trans) %>%
+  arrange(trans) %>% 
+  summarize(mean_cty = mean(cty), mean_hwy = mean(hwy))
+
+ggplot(mpg_trans)+
+  geom_bar( aes(x=trans, y=mean_hwy, fill="hwy" ), stat = "identity", position = "dodge", width = 0.4)+
+  geom_bar( aes(x=trans, y=mean_cty, fill ="cty"), stat = "identity", position = "dodge", width = 0.4)+
+  labs(title = "plot 2",
+       x = "Transmission",
+       y = "Mean Mileage",
+       fill = "Metric") +
+  scale_fill_manual(values = c("cty" = "blue", "hwy" = "red")) +
+  theme_minimal()
+```
+
+### Classes and Manufacturers
+```{r classes and manufacturers, echo=FALSE}
+mpg_classes <- mpg %>% 
+  group_by(class, manufacturer) %>%
+  count() %>% 
+  rename(count_number = n)
+
+
+ggplot(mpg_classes) +
+  geom_bar( aes(x=manufacturer, y=count_number, fill=class), stat="identity", position = "stack" )+
+  labs(title = "Count of Cars by Manufacturer and Class",
+       x = "Manufacturer",
+       y = "Count",
+       fill = "Class") +
+  theme_minimal()
+```
+

@@ -1,0 +1,94 @@
+---
+title: "crickets_markdown"
+author: "Kevin Richard"
+date: "2024-08-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(modeldata)
+```
+
+## Cricket Dataset analysis
+
+### Dataset Format
+```{r glimpse}
+glimpse(crickets)
+```
+
+### Species categories data count
+```{r dataset, echo=FALSE}
+ggplot(crickets, aes(x=species, fill=species))+
+  geom_bar(width = 0.5)+
+  labs(
+    x = "species",
+    y = "Count",
+    title = "Data count of Species",
+    fill = "Species",
+  )+
+  scale_color_brewer(palette="Dark2")+
+  theme_minimal()
+```
+
+## Basic Plots of categories to quantitative data cloumn
+
+```{r plots, echo=FALSE}
+ggplot(crickets, aes(x=temp, fill=species))+
+  geom_histogram(binwidth  = 0.5)+
+  labs(
+    x = "Temp",
+    y = "Count",
+    title = "Temp count",
+    fill = "Species",
+  )+
+  facet_wrap(~species, ncol=1)+
+  scale_color_brewer(palette="Dark2")+
+  theme_minimal()
+
+ggplot(crickets, aes(x=rate, fill=species))+
+  geom_histogram()+
+  labs(
+    x = "Chirp Rate",
+    y = "Count",
+    title = "Chirp Rate count",
+    fill = "Species",
+  )+
+  scale_color_brewer(palette="Dark2")+
+  theme_minimal()
+```
+
+## Temperature to Chirp rate relation
+```{r relations 1, echo=FALSE}
+ggplot(crickets, aes(x=temp, y=rate, color=species)) +
+  geom_boxplot() +
+  labs(
+    x = "Temperature",
+    y = "Chirp Rate",
+    title = "Chirp Rate to Temperature",
+    color = "Species"
+  )+
+  scale_color_brewer(palette="Dark2")+
+  theme_minimal()
+```
+
+### It can be noted that O.e spicies have a higher chirp rate than O.n
+
+```{r relations 2, echo=FALSE}
+ggplot(crickets, aes(x=temp, y=rate, color=species))+
+  geom_point(size = 1.5, alpha = 1, shape = "circle")+
+  geom_smooth(method = "lm", se = FALSE, linewidth = 0.5)+
+  labs(
+    x = "Temperature",
+    y = "Chirp Rate",
+    title = "Chirp Rate to Temperature",
+    color = "Species"
+  )+
+  scale_color_brewer(palette="Dark2")+
+  theme_minimal()
+```
+
+### From above it can be noted that :-
+### 1) The Chirp rate increases as the temperature raises irrespective of species
+### 2) Based on the available data: O.e has higher chirp rate than O.e
