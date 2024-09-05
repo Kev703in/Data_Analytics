@@ -1,0 +1,45 @@
+---
+title: "islr2_carseats"
+author: "Kevin Richard"
+date: "2024-09-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(ISLR2)
+```
+
+## Islr2_carseats
+
+```{r carseats}
+glimpse(Carseats)
+```
+
+## Including Plots
+
+### Following is a relation between our price and Competion price
+
+```{r plots_1, echo=FALSE}
+xy_min <- min(Carseats$CompPrice, Carseats$Price, na.rm=TRUE)
+ggplot(Carseats,aes(x=Price, y=CompPrice))+
+  geom_point()+
+  geom_smooth(method="lm")+
+  scale_x_continuous(limits = c(xy_min, NA))+
+  scale_y_continuous(limits = c(xy_min, NA))+
+  theme_minimal()
+```
+
+
+## Shevling Location to sales in USA and other places
+
+### After going through the data, the only inferable data columns are US, ShelveLoc, Sales
+
+```{r plots_2, echo=FALSE}
+ggplot(Carseats,aes(x=ShelveLoc, y=Sales))+
+  geom_violin(aes(fill=ShelveLoc))+
+  geom_boxplot(aes(fill=US))+
+  scale_x_discrete(limits = c("Bad", "Medium", "Good"))+
+  scale_color_brewer(palette = "Dark2")+
+  theme_minimal()
+```

@@ -1,0 +1,82 @@
+---
+title: "Nurses_dataset"
+author: "Kevin Richard"
+date: "2024-09-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(tidytuesdayR)
+tuesdata <- tidytuesdayR::tt_load(2021, week = 41)
+nurses <- tuesdata$nurses
+```
+
+## Nurses Dataset   
+
+```{r nurses}
+glimpse(nurses)
+```
+
+## Nurses agregate from 1998 to 2020
+
+
+```{r plots_1, echo=FALSE}
+nurses_agregate_national <- nurses %>% 
+  group_by(Year) %>% 
+  summarize(Total_Employed_Healthcare_national_Aggregate=mean(`Total Employed (Healthcare, National)_Aggregate`, na.rm=TRUE))
+
+ggplot(nurses_agregate_national, aes(x=Year, y=Total_Employed_Healthcare_national_Aggregate))+
+  geom_point()+
+  geom_line(color="blue")
+
+```
+
+### Total employed nurses from 1998 to 2020 statewise
+
+```{r plots_2, echo=FALSE}
+ggplot(nurses, aes(x=Year, y=`Total Employed (Healthcare, State)_Aggregate`, color=State))+
+  geom_point(alpha=0.3)+
+  geom_smooth( se=FALSE )+
+  theme_minimal()+
+  theme(legend.position = "bottom")+
+  guides(color = guide_legend(nrow = 2, byrow = TRUE))
+```
+
+## Nurses Avg hourly salary from 1998 to 2020 
+
+
+```{r plots_3, echo=FALSE}
+ggplot(nurses, aes(x=Year, y=`Hourly Wage Avg`, color=State))+
+  geom_point(alpha=0.3)+
+  geom_smooth( se=FALSE )+
+  theme_minimal()+
+  theme(legend.position = "bottom")+
+  guides(color = guide_legend(nrow = 2, byrow = TRUE))
+```
+
+## Nurses across states in 2020
+
+
+```{r plots_4, echo=FALSE}
+nurses_2020 <- nurses %>% 
+  filter(Year == 2020)
+
+ggplot(nurses_2020, aes(y = State, x = `Total Employed RN`)) +
+  geom_col()
+```
+
+
+```{r plots_5, echo=FALSE}
+nurses_2020_slice <- nurses %>% 
+  filter(Year == 2020) %>% 
+  slice_max(order_by = `Total Employed RN`, n = 20)
+
+ggplot(nurses_2020_slice, aes(y = fct_reorder(State, `Total Employed RN`),
+                        x = `Total Employed RN`)) +
+  geom_col() +
+  labs(y = "State")+
+  theme_minimal()
+
+```

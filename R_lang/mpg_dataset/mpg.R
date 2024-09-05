@@ -77,6 +77,19 @@ ggplot(mpg_trans)+
   theme_minimal()
 
 
+
+ggplot(mpg_trans)+
+  geom_bar( aes(x=trans, y=mean_hwy, fill="hwy" ),position = position_nudge(x = -0.2), stat = "identity", width = 0.4)+
+  geom_bar( aes(x=trans, y=mean_cty, fill ="cty"),position = position_nudge(x = 0.2), stat = "identity", width = 0.4)+
+  labs(title = "Mean City and Highway Mileage by Transmission Type",
+       x = "Transmission",
+       y = "Mean Mileage",
+       fill = "Metric") +
+  scale_fill_manual(values = c("cty" = "blue", "hwy" = "red"))
+  theme_minimal()
+  
+
+
 mpg_classes <- mpg %>% 
   group_by(class, manufacturer) %>%
   count() %>% 
@@ -100,6 +113,16 @@ ggplot(mpg_classes, aes(x = manufacturer, y = count_number, fill = class)) +
        fill = "Class") +
   theme_minimal()
 
+help(mpg)
+
+ggplot(mpg) +
+  geom_point( aes(x=displ, y=cty, color=class) )+
+  geom_smooth( aes(x=displ, y=cty, color=class),formula = 'y ~ x', method = "lm", se = FALSE)+
+  labs(title = "Count of Cars by Manufacturer and Class",
+       x = "displ",
+       y = "cty_mileage",
+       color = "Class") +
+  theme_minimal()
 
             
 cat("\014")
